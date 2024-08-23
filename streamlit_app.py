@@ -11,7 +11,7 @@ def check_supabase_config():
     if not url or not key:
         return "SupabaseのURLまたはAPIキーが設定されていません。secrets.tomlファイルを確認してください。"
     else:
-        return f"SupabaseのURL: {url}\nSupabaseのAPIキー: {key}"
+        return f"コネクトできています"
 
 # 関数の呼び出しと結果の表示
 result = check_supabase_config()
