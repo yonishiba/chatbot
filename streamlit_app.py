@@ -1,12 +1,26 @@
 import streamlit as st
-from supabase import create_client, Client
-from st_supabase_connection import SupabaseConnection
-
+from supabase import create_client
 
 # Supabaseの設定
-url = st.secrets["SUPABASE_URL"]
-key = st.secrets["SUPABASE_KEY"]
+url = st.secrets["supabase"]["SUPABASE_URL"]
+key = st.secrets["supabase"]["SUPABASE_KEY"]
 supabase = create_client(url, key)
+# 環境変数が正しく取得できているか確認
+def check_supabase_config():
+    # 環境変数が正しく取得できているか確認
+    if not url or not key:
+        return "SupabaseのURLまたはAPIキーが設定されていません。secrets.tomlファイルを確認してください。"
+    else:
+        return f"SupabaseのURL: {url}\nSupabaseのAPIキー: {key}"
+
+# 関数の呼び出しと結果の表示
+result = check_supabase_config()
+
+if "設定されていません" in result:
+    st.error(result)
+else:
+    for line in result.split("\n"):
+        st.write(line)
 user = supabase.auth.get_user()
 
 def login_signup():
