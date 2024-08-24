@@ -44,7 +44,8 @@ def user_signup(email, password):
 def chat_interface():
     user = st.session_state.user
     if user:
-        st.write(f"ユーザーID: {user.id}, メールアドレス: {user.email}")
+        # st.write(f"ユーザーID: {user.id}, メールアドレス: {user.email}")
+        st.write(f"Hello!")
         st.write("チャット画面")
         prompt = st.chat_input("Say something")
         if prompt:
@@ -60,17 +61,18 @@ def chat_interface():
 
 # ログインとサインアップ用のUIを表示する関数
 def use_login():
-    email = st.text_input("メールアドレス")
-    password = st.text_input("パスワード", type="password")
+    with st.form(key="form_login"):
+        email = st.text_input("メールアドレス")
+        password = st.text_input("パスワード", type="password")
 
-    col1, col2 = st.columns([1, 1])  # 画面を2分割
-    with col1:
-        if st.button("登録"):
-            user_signup(email, password)
+        col1, col2 = st.columns([1, 1])  # 画面を2分割
+        with col1:
+            if st.form_submit_button("登録"):
+                user_signup(email, password)
 
-    with col2:
-        if st.button("ログイン"):
-            login(email, password)
+        with col2:
+            if st.form_submit_button("ログイン"):
+                login(email, password)
 
 # メインコンテナの表示
 with st.container():
