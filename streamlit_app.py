@@ -83,34 +83,37 @@ def chat_interface():
         # st.write(f"ユーザーID: {user.id}, メールアドレス: {user.email}")
         st.write(f"Hello! {user.id}")
         st.write("チャット画面")
-        prompt = st.chat_input("Say something")
+        prompt = st.chat_input("カメラについて聞いてください😎")
         if prompt:
-            st.write(f"ユーザーの質問: {prompt}")
-            bot_response = ask_dify_bot(prompt)
+            with st.chat_message("user"):
+                st.write(f"ユーザーの質問: {prompt}")
+                bot_response = ask_dify_bot(prompt)
             if bot_response:
-                st.write(f"AIの応答: {bot_response}")
+                message = st.chat_message("assistant")
+                message.write(f"AIの応答: {bot_response}")
 
         # ログアウトボタン
         if st.button("ログアウト"):
             supabase.auth.sign_out()
             st.session_state.user = None
             st.success("ログアウトしました")
-            st.experimental_rerun()  # ログアウト後に画面をリロード
+            # st.rerun()
 
 # ログインとサインアップ用のUIを表示する関数
 def use_login():
+    email = st.text_input("メールアドレス")
+    password = st.text_input("パスワード", type="password")
+    if st.button("ログイン"):
+        login(email, password)
+        st.rerun()
+    '''
     with st.form(key="form_login"):
-        email = st.text_input("メールアドレス")
-        password = st.text_input("パスワード", type="password")
-
         col1, col2 = st.columns([1, 1])  # 画面を2分割
         with col1:
             if st.form_submit_button("登録"):
                 user_signup(email, password)
-
-        with col2:
-            if st.form_submit_button("ログイン"):
-                login(email, password)
+        with col2:'''
+            
 
 # メインコンテナの表示
 with st.container():
