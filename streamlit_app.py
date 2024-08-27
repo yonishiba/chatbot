@@ -2,7 +2,6 @@ import streamlit as st
 from supabase import create_client, Client
 import requests
 import json
-import pyperclip
 
 # Supabaseの設定
 url = st.secrets["supabase"]["SUPABASE_URL"]
