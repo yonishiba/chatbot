@@ -2,6 +2,7 @@ import streamlit as st
 from supabase import create_client, Client
 import requests
 import json
+import pyperclip
 
 # Supabaseの設定
 url = st.secrets["supabase"]["SUPABASE_URL"]
@@ -79,8 +80,8 @@ def ask_dify_bot(prompt):
                     if data.get('event') == 'message':
                         full_response += data.get('answer')
                         response_area.markdown(full_response)  # 全体のレスポンスを表示
-                    elif data.get('event') == 'message_end':
-                        st.write("会話が終了しました。")
+                    # elif data.get('event') == 'message_end':
+                        # st.write("会話が終了しました。")
         
         # チャットログに追加
         st.session_state.chat_log.append({"name": "assistant", "msg": full_response})
@@ -115,18 +116,18 @@ def chat_interface():
                 bot_response = ask_dify_bot(prompt)
                 if bot_response:
                     # message = st.chat_message("assistant")
-                    message.write(f"{bot_response}")
+                    # message.write(f"{bot_response}")
 
                     # セッションにチャットログを追加
-                    # st.session_state.chat_log.append({"name": "assistant", "msg": bot_response})
                     st.session_state.chat_log.append({"name": "user", "msg": prompt})
                     st.session_state.chat_log.append({"name": "assistant", "msg": bot_response})
 
-        # ログアウトボタン
-        if st.button("ログアウト"):
-            supabase.auth.sign_out()
-            st.session_state.user = None
-            st.success("ログアウトしました")
+def logout():
+    # ログアウトボタン
+    if st.button("ログアウト"):
+        supabase.auth.sign_out()
+        st.session_state.user = None
+        st.success("ログアウトしました")
 
 # ログインとサインアップ用のUIを表示する関数
 def use_login():
@@ -137,12 +138,13 @@ def use_login():
         st.rerun()
 
 # メインコンテナの表示
-with st.container():
-    st.title("Streamlit AI Chat is :blue[Cool] :sunglasses:")
-    
-    if st.session_state.user:
-        # ログイン済みならチャットインターフェースを表示
-        chat_interface()
-    else:
-        # ログインしていない場合はログイン画面を表示
-        use_login()
+# with st.container():
+st.title("Streamlit AI Chat is :blue[Cool] :sunglasses:")
+
+if st.session_state.user:
+    # ログイン済みならチャットインターフェースを表示
+    logout()
+    chat_interface()
+else:
+    # ログインしていない場合はログイン画面を表示
+    use_login()
